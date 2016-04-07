@@ -116,13 +116,15 @@ extern int sql_debug;
     SQL_NOT = 293,
     SQL_AS = 294,
     SQL_OR = 295,
-    SQL_EQUALS = 296,
-    SQL_LESS = 297,
-    SQL_GREATER = 298,
-    SQL_NOTNULL = 299,
-    SQL_ISNULL = 300,
-    SQL_IS = 301,
-    SQL_UMINUS = 302
+    SQL_COUNT = 296,
+    SQL_SUM = 297,
+    SQL_EQUALS = 298,
+    SQL_LESS = 299,
+    SQL_GREATER = 300,
+    SQL_NOTNULL = 301,
+    SQL_ISNULL = 302,
+    SQL_IS = 303,
+    SQL_UMINUS = 304
   };
 #endif
 
@@ -148,6 +150,7 @@ union SQL_STYPE
 	sql::TableRef* table;
 	sql::Expr* expr;
 	sql::ColumnDefinition* column_t;
+	sql::AggregationFunction* aggregation_t;
 
 	sql::SQLParserResult* stmt_list;
 
@@ -155,8 +158,9 @@ union SQL_STYPE
 	std::vector<sql::TableRef*>* table_vec;
 	std::vector<sql::ColumnDefinition*>* column_vec;
 	std::vector<sql::Expr*>* expr_vec;
+	std::vector<sql::AggregationFunction*>* agg_vec;
 
-#line 160 "bison_parser.h" /* yacc.c:1909  */
+#line 164 "bison_parser.h" /* yacc.c:1909  */
 };
 # define SQL_STYPE_IS_TRIVIAL 1
 # define SQL_STYPE_IS_DECLARED 1

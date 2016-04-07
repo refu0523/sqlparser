@@ -11,9 +11,9 @@ namespace sql {
             VARCHAR
         };
 
-        ColumnDefinition(char* name, DataType type,Expr* ex) :
-            name(name),
-			length(ex->ival),
+		ColumnDefinition(char* name, DataType type, Expr* ex) :
+			name(name),
+			length(ex->ival) ,
             type(type) {}
 
 		ColumnDefinition(char* name, DataType type, int length) :
@@ -24,7 +24,6 @@ namespace sql {
         virtual ~ColumnDefinition() {
             delete name;
         }
-
         char* name;
 		int length;
         DataType type;

@@ -7,6 +7,15 @@
 
 namespace sql {
 
+	struct AggregationFunction {
+		AggregationFunction(char* attribute) :
+			attribute(attribute) {}
+		virtual ~AggregationFunction() {
+			delete attribute;
+		}
+			char* attribute;
+	};
+
     struct SelectStatement : SQLStatement {
         SelectStatement() :
             SQLStatement(kStmtSelect),
@@ -23,9 +32,9 @@ namespace sql {
 
         TableRef* fromTable;
         std::vector<Expr*>* selectList;
+		std::vector<AggregationFunction*>* aggregation_list;
         Expr* whereClause;
 		SelectStatement* unionSelect;
-       
     };
 
 } // namespace sql

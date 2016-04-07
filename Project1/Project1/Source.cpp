@@ -31,12 +31,15 @@ int main(int argc, char *argv[]) {
 			switch (stmt->type()) {
 			case kStmtSelect:
 				se_st = (SelectStatement*)stmt;
+				cout << "SELECT" << endl;
+				cout << "se_st " << se_st->aggregation_list->front()->attribute << endl;
 				break;
 			case kStmtInsert:
 				in_st = (InsertStatement*)stmt;
 				break;
 			case kStmtCreate:
 				cr_st = (CreateStatement*)stmt;
+				cout << "cr_st ,Test" << cr_st->columns->front()->length << endl;
 				cout << "cr_st " << cr_st->tableName << endl;
 				cout << "cr_st " << cr_st->columns->front()->length<<endl;
 				cout << "cr_st " << cr_st->columns->front()->name<<endl;
