@@ -4,7 +4,6 @@
 #include "SelectStatement.h"
 #include "CreateStatement.h"
 #include "InsertStatement.h"
-#include "PrepareStatement.h"
 
 
 #endif // __STATEMENTS_H__ 

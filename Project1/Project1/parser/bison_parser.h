@@ -105,26 +105,25 @@ extern int sql_debug;
     SQL_WHERE = 282,
     SQL_FROM = 283,
     SQL_INTO = 284,
-    SQL_JOIN = 285,
-    SQL_LEFT = 286,
-    SQL_NULL = 287,
-    SQL_ADD = 288,
-    SQL_ALL = 289,
-    SQL_AND = 290,
-    SQL_INT = 291,
-    SQL_KEY = 292,
-    SQL_NOT = 293,
-    SQL_AS = 294,
-    SQL_OR = 295,
-    SQL_COUNT = 296,
-    SQL_SUM = 297,
-    SQL_EQUALS = 298,
-    SQL_LESS = 299,
-    SQL_GREATER = 300,
-    SQL_NOTNULL = 301,
-    SQL_ISNULL = 302,
-    SQL_IS = 303,
-    SQL_UMINUS = 304
+    SQL_LEFT = 285,
+    SQL_NULL = 286,
+    SQL_ADD = 287,
+    SQL_ALL = 288,
+    SQL_AND = 289,
+    SQL_INT = 290,
+    SQL_KEY = 291,
+    SQL_NOT = 292,
+    SQL_AS = 293,
+    SQL_OR = 294,
+    SQL_COUNT = 295,
+    SQL_SUM = 296,
+    SQL_EQUALS = 297,
+    SQL_LESS = 298,
+    SQL_GREATER = 299,
+    SQL_NOTNULL = 300,
+    SQL_ISNULL = 301,
+    SQL_IS = 302,
+    SQL_UMINUS = 303
   };
 #endif
 
@@ -145,8 +144,8 @@ union SQL_STYPE
 	sql::SelectStatement* 	select_stmt;
 	sql::CreateStatement* 	create_stmt;
 	sql::InsertStatement* 	insert_stmt;
-	sql::PrepareStatement* prep_stmt;
-
+	
+	
 	sql::TableRef* table;
 	sql::Expr* expr;
 	sql::ColumnDefinition* column_t;
@@ -159,6 +158,7 @@ union SQL_STYPE
 	std::vector<sql::ColumnDefinition*>* column_vec;
 	std::vector<sql::Expr*>* expr_vec;
 	std::vector<sql::AggregationFunction*>* agg_vec;
+
 
 #line 164 "bison_parser.h" /* yacc.c:1909  */
 };

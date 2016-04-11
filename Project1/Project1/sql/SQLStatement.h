@@ -5,27 +5,26 @@
 #include <vector>
 typedef unsigned int uint;
 namespace sql {
-    typedef enum {
-        kStmtError, 
-        kStmtSelect,
-        kStmtInsert,
-        kStmtCreate,
-        kStmtPrepare,
-    } StatementType;
+	typedef enum {
+		kStmtError,
+		kStmtSelect,
+		kStmtInsert,
+		kStmtCreate,
+	} StatementType;
 
-    struct SQLStatement {
-        SQLStatement(StatementType type) :
-            _type(type) {};
+	struct SQLStatement {
+		SQLStatement(StatementType type) :
+			_type(type) {};
 
-        virtual ~SQLStatement() {}
+		virtual ~SQLStatement() {}
 
-        virtual StatementType type() {
-            return _type;
-        }
+		virtual StatementType type() {
+			return _type;
+		}
 
-    private:
-        StatementType _type;
-    };
+	private:
+		StatementType _type;
+	};
 
-} 
-#endif // __SQLSTATEMENT_H__
+}
+#endif

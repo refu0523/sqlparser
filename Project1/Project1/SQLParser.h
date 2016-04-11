@@ -6,17 +6,17 @@
 
 namespace sql {
 
-    class SQLParser {
-    public:
-        static SQLParserResult* parseSQLString(const char* sql);
-        static SQLParserResult* parseSQLString(const std::string& sql);
+	class SQLParser {
+	public:
+		static SQLParserResult* parseSQLString(const char* sql);
+		static SQLParserResult* parseSQLString(const std::string& sql);
 
-    private:
-        SQLParser();
-    };
+	private:
+		SQLParser();
+	};
 
 
-} 
+}
 
 
 #endif

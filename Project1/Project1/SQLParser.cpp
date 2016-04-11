@@ -8,11 +8,6 @@
 
 namespace sql {
 
-    SQLParser::SQLParser() {
-        fprintf(stderr, "SQLParser only has static methods atm! Do not initialize!\n");
-    }
-
-
     SQLParserResult* SQLParser::parseSQLString(const char *text) {
         SQLParserResult* result = NULL;
         yyscan_t scanner;
@@ -30,9 +25,7 @@ namespace sql {
             // Returns an error stmt object
             return result;
         }
-
         sql__delete_buffer(state, scanner);
-
         sql_lex_destroy(scanner);
         return result;
     }
@@ -43,4 +36,4 @@ namespace sql {
     }
 
 
-} // namespace sql
+}

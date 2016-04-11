@@ -114,23 +114,19 @@
     <ClCompile Include="parser\bison_parser.cpp" />
     <ClCompile Include="parser\flex_lexer.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="sqlhelper.cpp" />
     <ClCompile Include="SQLParser.cpp" />
     <ClCompile Include="SQLParserResult.cpp" />
-    <ClCompile Include="sql\destruct.cpp" />
     <ClCompile Include="sql\Expr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="parser\bison_parser.h" />
     <ClInclude Include="parser\flex_lexer.h" />
     <ClInclude Include="parser\parser_typedef.h" />
-    <ClInclude Include="sqlhelper.h" />
     <ClInclude Include="SQLParser.h" />
     <ClInclude Include="SQLParserResult.h" />
     <ClInclude Include="sql\CreateStatement.h" />
     <ClInclude Include="sql\Expr.h" />
     <ClInclude Include="sql\InsertStatement.h" />
-    <ClInclude Include="sql\PrepareStatement.h" />
     <ClInclude Include="sql\SelectStatement.h" />
     <ClInclude Include="sql\SQLStatement.h" />
     <ClInclude Include="sql\statements.h" />

@@ -13,29 +13,25 @@ namespace sql {
 		virtual ~AggregationFunction() {
 			delete attribute;
 		}
-			char* attribute;
+		char* attribute;
 	};
+	struct SelectStatement : SQLStatement {
+		SelectStatement() :
+			SQLStatement(kStmtSelect),
+			fromTable(NULL),
+			selectList(NULL),
+			whereClause(NULL) {};
 
-    struct SelectStatement : SQLStatement {
-        SelectStatement() :
-            SQLStatement(kStmtSelect),
-            fromTable(NULL),
-            selectList(NULL),
-            whereClause(NULL),
-            unionSelect(NULL) {};
-
-        virtual ~SelectStatement() {
-            delete fromTable;
-            delete selectList;
-            delete whereClause;          
-        }
-
-        TableRef* fromTable;
-        std::vector<Expr*>* selectList;
+		virtual ~SelectStatement() {
+			delete fromTable;
+			delete selectList;
+			delete whereClause;
+		}
 		std::vector<AggregationFunction*>* aggregation_list;
-        Expr* whereClause;
-		SelectStatement* unionSelect;
-    };
+		TableRef* fromTable;
+		std::vector<Expr*>* selectList;
+		Expr* whereClause;
 
-} // namespace sql
+	};
+}
 #endif

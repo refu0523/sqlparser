@@ -27,7 +27,14 @@ namespace sql {
             list(NULL),
             join(NULL) {}
 
-        virtual ~TableRef();
+         
+
+		virtual TableRef::~TableRef() {
+			delete name;
+			delete alias;
+			delete select;
+			delete list;
+		}
 
         TableRefType type;
 

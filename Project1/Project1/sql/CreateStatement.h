@@ -31,14 +31,10 @@ namespace sql {
 
 
     struct CreateStatement : SQLStatement {
-        enum CreateType {
-            kTable,
-            kTableFromTbl // Hyrise file format
-        };
+    
 
-        CreateStatement(CreateType type) :
+        CreateStatement() :
             SQLStatement(kStmtCreate),
-            type(type),
             tableName(NULL),
             columns(NULL) {};
 
@@ -47,10 +43,9 @@ namespace sql {
             delete tableName;
         }
 
-        CreateType type;
         const char* tableName;
         std::vector<ColumnDefinition*>* columns;
     };
 
-} // namespace sql
+} 
 #endif

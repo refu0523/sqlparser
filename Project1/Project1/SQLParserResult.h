@@ -1,25 +1,26 @@
 #ifndef __SQLPARSERRESULT__
 #define __SQLPARSERRESULT__
 #include "sql/SQLStatement.h"
+
 namespace sql {
- 
-    class SQLParserResult {
-    public:
 
-        SQLParserResult();
-        SQLParserResult(SQLStatement* stmt);
-        virtual ~SQLParserResult();
+	class SQLParserResult {
+	public:
 
-        void addStatement(SQLStatement* stmt);
-        SQLStatement* getStatement(int id);
+		SQLParserResult();
+		SQLParserResult(SQLStatement* stmt);
+		virtual ~SQLParserResult();
+
+		void addStatement(SQLStatement* stmt);
+		SQLStatement* getStatement(int id);
 		size_t size();
-        std::vector<SQLStatement*> statements;
-        bool isValid;
+		std::vector<SQLStatement*>statements;
+		bool isValid;
 
-        const char* errorMsg;
-        int errorLine;
-        int errorColumn;
-    };
+		const char* errorMsg;
+		int errorLine;
+		int errorColumn;
+	};
 
 }
 
