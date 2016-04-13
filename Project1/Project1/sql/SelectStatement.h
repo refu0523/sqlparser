@@ -8,12 +8,20 @@
 namespace sql {
 
 	struct AggregationFunction {
-		AggregationFunction(char* attribute) :
-			attribute(attribute) {}
+		typedef enum {
+			kSum,
+			kCount
+		} AggregationType;
+
+		AggregationFunction(AggregationType type,char* attribute) :
+			attribute(attribute),
+			type(type){}
+
 		virtual ~AggregationFunction() {
 			delete attribute;
 		}
 		char* attribute;
+		AggregationType type;
 	};
 	struct SelectStatement : SQLStatement {
 		SelectStatement() :
@@ -31,7 +39,20 @@ namespace sql {
 		TableRef* fromTable;
 		std::vector<Expr*>* selectList;
 		Expr* whereClause;
-
+		bool IsAggregationExist = false;
+		bool IsSelectListExist = false;
+		inline bool hasAggregation(){
+			return IsAggregationExist;
+		}
+		inline bool hasSelect() {
+			return IsSelectListExist;
+		}
+		inline bool hasWhere() {
+			if (whereClause == NULL)
+				return false;
+			else
+				return true;
+		}
 	};
 }
 #endif

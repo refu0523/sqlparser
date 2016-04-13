@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 			switch (stmt->type()) {
 			case kStmtSelect:
 				se_st = (SelectStatement*)stmt;
-				cout << "SELECT" << endl;
+				cout << se_st->hasAggregation() << endl;
 				cout << "se_st " << se_st->aggregation_list->front()->attribute << endl;
 				break;
 			case kStmtInsert:
