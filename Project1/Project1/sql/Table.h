@@ -12,8 +12,6 @@ namespace sql {
     struct TableRef;
     typedef enum {
         kTableName,
-        kTableSelect,
-        kTableJoin,
         kTableCrossProduct
     } TableRefType;
 
@@ -32,13 +30,9 @@ namespace sql {
 		}
 
         TableRefType type;
-
         char* name;
         char* alias;
-
         std::vector<TableRef*>* list;
-
-
         inline char* getName() {
             if (alias != NULL) return alias;
             else return name;

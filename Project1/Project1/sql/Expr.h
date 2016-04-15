@@ -9,18 +9,13 @@ namespace sql {
 	// Helper function
 	char* substr(const char* source, int from, int to);
 
-
-
 	typedef enum {
-		kExprLiteralFloat,
 		kExprLiteralString,
 		kExprLiteralInt,
 		kExprStar,
 		kExprColumnRef,
-		kExprFunctionRef,
 		kExprOperator
 	} ExprType;
-
 
 	typedef struct Expr Expr;
 
@@ -70,13 +65,10 @@ namespace sql {
 		char* name;
 		char* table;
 		char* alias;
-		float fval;
 		int64_t ival;
-		int64_t ival2;
 
 		OperatorType op_type;
 		char op_char;
-		bool distinct;
 
 		/**
 		* Convenience accessor methods
@@ -85,7 +77,7 @@ namespace sql {
 			return e_type == type;
 		}
 		inline bool isLiteral() {
-			return isType(kExprLiteralInt) || isType(kExprLiteralFloat) || isType(kExprLiteralString);
+			return isType(kExprLiteralInt) || isType(kExprLiteralString);
 		}
 		inline bool hasAlias() {
 			return alias != NULL;
