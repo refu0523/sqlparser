@@ -11,21 +11,24 @@ namespace sql {
             VARCHAR
         };
 
-		ColumnDefinition(char* name, DataType type, Expr* ex) :
+		ColumnDefinition(char* name, DataType type, Expr* ex,bool IsPK) :
 			name(name),
 			length(ex->ival) ,
-            type(type) {}
+            type(type),
+			IsPK(IsPK){}
 
-		ColumnDefinition(char* name, DataType type, int length) :
+		ColumnDefinition(char* name, DataType type, int length,bool IsPK) :
 			name(name),
 			length(length),
-			type(type) {}
+			type(type),
+			IsPK(IsPK){}
 
         virtual ~ColumnDefinition() {
             delete name;
         }
         char* name;
 		int length;
+		bool IsPK;
         DataType type;
     };
 
@@ -36,15 +39,26 @@ namespace sql {
         CreateStatement() :
             SQLStatement(kStmtCreate),
             tableName(NULL),
-            columns(NULL) {};
+            columns(NULL),
+			offsets(NULL){};
 
         virtual ~CreateStatement() {
             delete columns;
             delete tableName;
+			delete offsets;
         }
-
+		
         const char* tableName;
         std::vector<ColumnDefinition*>* columns;
+		std::vector<int>* offsets;
+		
+		inline void calculateOffsets(){
+			int offset = 0;
+			for (int i = 0; i < columns->size(); i++) {
+				offsets->push_back(offset);
+				offset += columns->at(i)->length;
+			}
+		}
     };
 
 } 

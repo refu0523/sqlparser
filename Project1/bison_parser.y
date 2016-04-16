@@ -91,8 +91,8 @@ int yyerror(YYLTYPE* llocp, SQLParserResult** result, yyscan_t scanner, const ch
 	sql::SelectStatement* 	select_stmt;
 	sql::CreateStatement* 	create_stmt;
 	sql::InsertStatement* 	insert_stmt;
-	sql::PrepareStatement* prep_stmt;
-
+	
+	
 	sql::TableRef* table;
 	sql::Expr* expr;
 	sql::ColumnDefinition* column_t;
@@ -105,6 +105,7 @@ int yyerror(YYLTYPE* llocp, SQLParserResult** result, yyscan_t scanner, const ch
 	std::vector<sql::ColumnDefinition*>* column_vec;
 	std::vector<sql::Expr*>* expr_vec;
 	std::vector<sql::AggregationFunction*>* agg_vec;
+
 }
 
 %token <sval> IDENTIFIER STRING
@@ -120,35 +121,31 @@ int yyerror(YYLTYPE* llocp, SQLParserResult** result, yyscan_t scanner, const ch
 %token TABLES VALUES AFTER
 %token INNER 
 %token RIGHT TABLE WHERE
-%token FROM INTO JOIN LEFT 
+%token FROM INTO LEFT 
 %token NULL ADD ALL
 %token AND INT KEY NOT AS 
-%token OR
+%token OR 
 %token COUNT SUM 
 
 
 %type <stmt_list>	statement_list
-%type <statement> 	statement preparable_statement
-%type <prep_stmt>	prepare_statement
+%type <statement> 	statement 
 %type <select_stmt> select_statement select_with_paren select_no_paren select_clause
 %type <create_stmt> create_statement
 %type <insert_stmt> insert_statement
 %type <sval> 		table_name opt_alias alias 
-%type <uval>	    opt_join_type
-%type <table> 		from_clause table_ref table_ref_atomic table_ref_name
-%type <table>		join_clause join_table 
-%type <expr> 		expr scalar_expr unary_expr binary_expr star_expr expr_alias placeholder_expr
-%type <expr> 		column_name literal int_literal num_literal string_literal
-%type <expr> 		comp_expr opt_where  
+%type <table> 		from_clause table_ref table_ref_atomic 
+%type <expr> 		expr scalar_expr unary_expr binary_expr star_expr expr_alias 
+%type <expr> 		column_name literal int_literal  string_literal
+%type <expr> 		comp_expr   opt_where
 %type <column_t>	column_def
 %type <aggregation_t>	aggregation_def
 
 %type <str_vec>		ident_commalist opt_column_list
-%type <expr_vec> 	expr_list select_list literal_list
+%type <expr_vec> 	expr_list literal_list
 %type <table_vec> 	table_ref_commalist
 %type <column_vec>	column_def_commalist
 %type <agg_vec>		aggregation_def_commalist
-
 
 %left		OR
 %left		AND
@@ -179,31 +176,10 @@ statement_list:
 	|	statement_list ';' statement { $1->addStatement($3); $$ = $1; };
 
 statement:
-		prepare_statement {
-			$1->setPlaceholders(yyloc.placeholder_list);
-			yyloc.placeholder_list.clear();
-			$$ = $1;
-		}
-	|	preparable_statement;
-
-
-preparable_statement:
 		select_statement { $$ = $1; }
 	|	create_statement { $$ = $1; }
 	|	insert_statement { $$ = $1; };
 
-
-prepare_statement:
-		PREPARE IDENTIFIER ':' preparable_statement {
-			$$ = new PrepareStatement();
-			$$->name = $2;
-			$$->query = new SQLParserResult($4);
-		}
-	|	PREPARE IDENTIFIER '{' statement_list opt_semicolon '}' {
-			$$ = new PrepareStatement();
-			$$->name = $2;
-			$$->query = $4;
-		};
 
 
 
@@ -211,7 +187,7 @@ prepare_statement:
 create_statement:
 		
 		CREATE TABLE table_name '(' column_def_commalist ')' {
-			$$ = new CreateStatement(CreateStatement::kTable);
+			$$ = new CreateStatement();
 			$$->tableName = $3;
 			$$->columns = $5;
 		};
@@ -234,16 +210,15 @@ column_def:
 
 insert_statement:
 		INSERT INTO table_name opt_column_list VALUES '(' literal_list ')' {
-			$$ = new InsertStatement(InsertStatement::kInsertValues);
+			$$ = new InsertStatement();
 			$$->tableName = $3;
 			$$->columns = $4;
 			$$->values = $7;
 		}
-	|	INSERT INTO table_name opt_column_list select_no_paren {
-			$$ = new InsertStatement(InsertStatement::kInsertSelect);
+	|	INSERT INTO table_name opt_column_list  {
+			$$ = new InsertStatement();
 			$$->tableName = $3;
 			$$->columns = $4;
-			$$->select = $5;
 		};
 
 
@@ -268,16 +243,24 @@ select_no_paren:
 
 
 select_clause:
-		SELECT select_list from_clause opt_where  {
+		SELECT expr_list from_clause opt_where  {
 			$$ = new SelectStatement();
 			$$->selectList = $2;
 			$$->fromTable = $3;
 			$$->whereClause = $4;
+			$$->IsSelectListExist=true;
+		}
+		|SELECT aggregation_def_commalist from_clause opt_where  {
+			$$ = new SelectStatement();
+			$$->aggregation_list = $2;
+			$$->fromTable = $3;
+			$$->whereClause = $4;
+			$$->IsAggregationExist=true;
+			
 		};
 
-select_list:
-		expr_list
-	|	aggregation_def_commalist;
+
+
 
 from_clause:
 		FROM table_ref { $$ = $2; };
@@ -288,15 +271,17 @@ opt_where:
 
 aggregation_def_commalist:
 		aggregation_def { $$ = new std::vector<AggregationFunction*>(); $$->push_back($1); };
-	
+		
 aggregation_def:
 		COUNT '(' IDENTIFIER ')'{ 
-			$$ = new AggregationFunction($3);
+			$$ = new AggregationFunction(AggregationFunction::kCount,$3);
+			
 		}
 	|	SUM	  '(' IDENTIFIER ')'{
-			$$ = new AggregationFunction($3);
+			$$ = new AggregationFunction(AggregationFunction::kSum,$3);
 		};
 
+		
 /*expression*/
 expr_list:
 		expr_alias { $$ = new std::vector<Expr*>(); $$->push_back($1); }
@@ -354,16 +339,10 @@ column_name:
 
 literal:
 		string_literal
-	|	num_literal
-	|	placeholder_expr;
+	|	int_literal;
 
 string_literal:
 		STRING { $$ = Expr::makeLiteral($1); };
-
-
-num_literal:
-		FLOATVAL { $$ = Expr::makeLiteral($1); }
-	|	int_literal;
 
 int_literal:
 		INTVAL { $$ = Expr::makeLiteral($1); };
@@ -372,12 +351,6 @@ star_expr:
 		'*' { $$ = new Expr(kExprStar); };
 
 
-placeholder_expr:
-		'?' {
-			$$ = Expr::makePlaceholder(yylloc.total_column);
-			yyloc.placeholder_list.push_back($$);
-		};
-		
 table_ref:
 		table_ref_atomic
 	|	table_ref_atomic ',' table_ref_commalist {
@@ -387,24 +360,7 @@ table_ref:
 			$$ = tbl;
 		};
 
-
 table_ref_atomic:
-		table_ref_name
-	|	'(' select_statement ')' alias {
-			auto tbl = new TableRef(kTableSelect);
-			tbl->select = $2;
-			tbl->alias = $4;
-			$$ = tbl;
-		}
-	|	join_clause;
-
-
-table_ref_commalist:
-		table_ref_atomic { $$ = new std::vector<TableRef*>(); $$->push_back($1); }
-	|	table_ref_commalist ',' table_ref_atomic { $1->push_back($3); $$ = $1; };
-
-
-table_ref_name:
 		table_name opt_alias {
 			auto tbl = new TableRef(kTableName);
 			tbl->name = $1;
@@ -412,44 +368,21 @@ table_ref_name:
 			$$ = tbl;
 		};
 
+table_ref_commalist:
+		table_ref_atomic { $$ = new std::vector<TableRef*>(); $$->push_back($1); }
+	|	table_ref_commalist ',' table_ref_atomic { $1->push_back($3); $$ = $1; };
+
 table_name:
 		IDENTIFIER
 	|	IDENTIFIER '.' IDENTIFIER;
 
-
 alias:	
 		AS IDENTIFIER { $$ = $2; }
-	|	IDENTIFIER;
+		;
 
 opt_alias:
 		alias
 	|	/* empty */ { $$ = NULL; };
-
-
-join_clause:
-		join_table opt_join_type JOIN join_table 
-		{ 
-			$$ = new TableRef(kTableJoin);
-			$$->join = new JoinDefinition();
-			$$->join->type = (JoinType) $2;
-			$$->join->left = $1;
-			$$->join->right = $4;
-		};
-
-opt_join_type:
-		INNER 	{ $$ = kJoinInner; }
-	|	LEFT 	{ $$ = kJoinLeft; }
-	|	RIGHT 	{ $$ = kJoinRight; }
-	|	/* empty, default */ 	{ $$ = kJoinInner; };
-
-join_table:
-		'(' select_statement ')' alias {
-			auto tbl = new TableRef(kTableSelect);
-			tbl->select = $2;
-			tbl->alias = $4;
-			$$ = tbl;
-		}
-	|	table_ref_name;
 
 opt_semicolon:
 		';'

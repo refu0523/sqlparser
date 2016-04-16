@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
 	string s;
 	while (1) {
 
-	string query;
+	string query;//= "select a from b;\ninsert into a values (1);";
 	getline(cin, query);
 	
 
