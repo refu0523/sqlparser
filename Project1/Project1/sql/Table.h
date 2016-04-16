@@ -20,19 +20,16 @@ namespace sql {
         TableRef(TableRefType type) :
             type(type),
             name(NULL),
-            alias(NULL),
-            list(NULL) {}
+            alias(NULL) {}
 
 		virtual TableRef::~TableRef() {
 			delete name;
 			delete alias;
-			delete list;
 		}
 
         TableRefType type;
         char* name;
         char* alias;
-        std::vector<TableRef*>* list;
         inline char* getName() {
             if (alias != NULL) return alias;
             else return name;

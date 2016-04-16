@@ -134,7 +134,7 @@ int yyerror(YYLTYPE* llocp, SQLParserResult** result, yyscan_t scanner, const ch
 %type <create_stmt> create_statement
 %type <insert_stmt> insert_statement
 %type <sval> 		table_name opt_alias alias 
-%type <table> 		from_clause table_ref table_ref_atomic 
+%type <table> 		  table_ref_atomic 
 %type <expr> 		expr scalar_expr unary_expr binary_expr star_expr expr_alias 
 %type <expr> 		column_name literal int_literal  string_literal
 %type <expr> 		comp_expr   opt_where
@@ -244,34 +244,29 @@ select_no_paren:
 
 
 select_clause:
-		SELECT expr_list from_clause opt_where  {
+		SELECT expr_list FROM table_ref_commalist opt_where  {
 			$$ = new SelectStatement();
 			$$->selectList = $2;
-			$$->fromTable = $3;
-			$$->whereClause = $4;
+			$$->fromTable = $4;
+			$$->whereClause = $5;
 			$$->IsSelectListExist=true;
 		}
-		|SELECT aggregation_def_commalist from_clause opt_where  {
+		|SELECT aggregation_def_commalist FROM table_ref_commalist opt_where  {
 			$$ = new SelectStatement();
 			$$->aggregation_list = $2;
-			$$->fromTable = $3;
-			$$->whereClause = $4;
+			$$->fromTable = $4;
+			$$->whereClause = $5;
 			$$->IsAggregationExist=true;
 			
 		};
 
-
-
-
-from_clause:
-		FROM table_ref { $$ = $2; };
 
 opt_where:
 		WHERE expr { $$ = $2; }
 	|	/* empty */ { $$ = NULL; };
 
 aggregation_def_commalist:
-		aggregation_def { $$ = new std::vector<AggregationFunction*>(); $$->push_back($1); }
+	aggregation_def { $$ = new std::vector<AggregationFunction*>(); $$->push_back($1); }
 		|	aggregation_def_commalist ',' aggregation_def { $1->push_back($3); $$ = $1; };
 		
 aggregation_def:
@@ -353,26 +348,19 @@ star_expr:
 		'*' { $$ = new Expr(kExprStar); };
 
 
-table_ref:
-		table_ref_atomic
-	|	table_ref_atomic ',' table_ref_commalist {
-			$3->push_back($1);
-			auto tbl = new TableRef(kTableCrossProduct);
-			tbl->list = $3;
-			$$ = tbl;
-		};
-
-table_ref_atomic:
-		table_name opt_alias {
-			auto tbl = new TableRef(kTableName);
-			tbl->name = $1;
-			tbl->alias = $2;
-			$$ = tbl;
-		};
 
 table_ref_commalist:
 		table_ref_atomic { $$ = new std::vector<TableRef*>(); $$->push_back($1); }
-	|	table_ref_commalist ',' table_ref_atomic { $1->push_back($3); $$ = $1; };
+	|	table_ref_commalist ',' table_ref_atomic {$1->push_back($3); $$ = $1; };
+
+table_ref_atomic:
+		table_name opt_alias {
+			$$ = new TableRef(kTableName);
+			$$->name = $1;
+			$$->alias = $2;
+	
+		};
+
 
 table_name:
 		IDENTIFIER
