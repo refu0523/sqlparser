@@ -34,8 +34,6 @@ namespace sql {
 			NOT_EQUALS,
 			LESS_EQ,
 			GREATER_EQ,
-			LIKE,
-			NOT_LIKE,
 			AND,
 			OR,
 			// Unary
