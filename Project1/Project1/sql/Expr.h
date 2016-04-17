@@ -21,13 +21,7 @@ namespace sql {
 
 
 	struct Expr {
-		/**
-		* Operator types. These are important for expressions of type kExprOperator
-		* Trivial types are those that can be described by a single character e.g:
-		* + - * / < > = %
-		* Non-trivial are:
-		* <> <= >= LIKE ISNULL NOT
-		*/
+		
 		typedef enum {
 			SIMPLE_OP,
 			// Binary
@@ -42,7 +36,7 @@ namespace sql {
 			ISNULL
 		} OperatorType;
 
-
+	
 
 		Expr(ExprType type) :
 			type(type),
@@ -54,8 +48,14 @@ namespace sql {
 
 		// Interesting side-effect:
 		// Making the destructor virtual used to cause segmentation faults
-		~Expr();
-
+		
+		~Expr() {
+			delete expr;
+			delete expr2;
+			delete name;
+			delete table;
+			delete alias;
+		}
 		ExprType type;
 
 		Expr* expr;
