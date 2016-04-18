@@ -13,24 +13,14 @@ namespace sql {
 			kCount
 		} AggregationType;
 
-		AggregationFunction(AggregationType type,char* attribute) :
+		AggregationFunction(AggregationType type,Expr* attribute) :
 			attribute(attribute),
 			type(type){}
-		AggregationFunction(AggregationType type,char* tableName, char* attribute) :
-			tableName(tableName),
-			attribute(attribute),
-			type(type) {}
-		inline bool hasTableName() {
-			return IsTableName;
-		}
-
 		virtual ~AggregationFunction() {
 			delete attribute;
 		}
-		char* attribute;
-		char* tableName;
+		Expr* attribute;
 		AggregationType type;
-		bool IsTableName = false;
 	};
 	struct SelectStatement : SQLStatement {
 		SelectStatement() :

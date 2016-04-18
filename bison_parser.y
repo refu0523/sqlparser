@@ -270,19 +270,11 @@ aggregation_def_commalist:
 		|	aggregation_def_commalist ',' aggregation_def { $1->push_back($3); $$ = $1; };
 		
 aggregation_def:
-		COUNT '(' IDENTIFIER ')'{ 
+		COUNT '(' scalar_expr ')'{ 
 			$$ = new AggregationFunction(AggregationFunction::kCount,$3);
 		}
-	|	COUNT '(' IDENTIFIER '.' IDENTIFIER ')'{ 
-			$$ = new AggregationFunction(AggregationFunction::kCount,$3,$5);
-			$$ -> IsTableName = true;
-		}
-	|	SUM	  '(' IDENTIFIER ')'{
+	|	SUM	 '(' scalar_expr ')'{
 			$$ = new AggregationFunction(AggregationFunction::kSum,$3);
-		}
-	|	SUM	  '(' IDENTIFIER '.' IDENTIFIER ')'{
-			$$ = new AggregationFunction(AggregationFunction::kSum,$3,$5);
-			$$ -> IsTableName = true;
 		};
 		
 /*expression*/
