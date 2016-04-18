@@ -73,11 +73,6 @@ namespace sql {
 		return e;
 	}
 
-	Expr::~Expr() {
-		delete expr;
-		delete expr2;
-		delete name;
-		delete table;
-	}
+	
 
 }

@@ -272,12 +272,18 @@ aggregation_def_commalist:
 aggregation_def:
 		COUNT '(' IDENTIFIER ')'{ 
 			$$ = new AggregationFunction(AggregationFunction::kCount,$3);
-			
+		}
+	|	COUNT '(' IDENTIFIER '.' IDENTIFIER ')'{ 
+			$$ = new AggregationFunction(AggregationFunction::kCount,$3,$5);
+			$$ -> IsTableName = true;
 		}
 	|	SUM	  '(' IDENTIFIER ')'{
 			$$ = new AggregationFunction(AggregationFunction::kSum,$3);
+		}
+	|	SUM	  '(' IDENTIFIER '.' IDENTIFIER ')'{
+			$$ = new AggregationFunction(AggregationFunction::kSum,$3,$5);
+			$$ -> IsTableName = true;
 		};
-
 		
 /*expression*/
 expr_list:

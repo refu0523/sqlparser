@@ -16,12 +16,21 @@ namespace sql {
 		AggregationFunction(AggregationType type,char* attribute) :
 			attribute(attribute),
 			type(type){}
+		AggregationFunction(AggregationType type,char* tableName, char* attribute) :
+			tableName(tableName),
+			attribute(attribute),
+			type(type) {}
+		inline bool hasTableName() {
+			return IsTableName;
+		}
 
 		virtual ~AggregationFunction() {
 			delete attribute;
 		}
 		char* attribute;
+		char* tableName;
 		AggregationType type;
+		bool IsTableName = false;
 	};
 	struct SelectStatement : SQLStatement {
 		SelectStatement() :
@@ -41,6 +50,7 @@ namespace sql {
 		Expr* whereClause;
 		bool IsAggregationExist = false;
 		bool IsSelectListExist = false;
+		
 		inline bool hasAggregation(){
 			return IsAggregationExist;
 		}
