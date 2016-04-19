@@ -17,7 +17,7 @@ namespace sql {
 		std::vector<SQLStatement*>statements;
 		bool isValid;
 
-		const char* errorMsg;
+		const char* errorMsg= NULL;
 		int errorLine;
 		int errorColumn;
 	};

@@ -26,7 +26,7 @@ namespace sql {
         virtual ~ColumnDefinition() {
             delete name;
         }
-        char* name;
+        char* name = NULL;
 		int length;
 		bool IsPK;
         DataType type;

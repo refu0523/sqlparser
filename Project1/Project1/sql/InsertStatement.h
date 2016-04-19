@@ -21,9 +21,9 @@ namespace sql {
 			delete values;
 		}
 
-		const char* tableName;
-		std::vector<char*>* columns;
-		std::vector<Expr*>* values;
+		const char* tableName= NULL;
+		std::vector<char*>* columns=NULL;
+		std::vector<Expr*>* values = NULL;
 	};
 
 }

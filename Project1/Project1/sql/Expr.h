@@ -58,11 +58,11 @@ namespace sql {
 		}
 		ExprType type;
 
-		Expr* expr;
-		Expr* expr2;
-		char* name;
-		char* table;
-		char* alias;
+		Expr* expr=NULL;
+		Expr* expr2 = NULL;
+		char* name = NULL;
+		char* table = NULL;
+		char* alias = NULL;
 		int64_t ival;
 
 		OperatorType op_type;

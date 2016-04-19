@@ -4,12 +4,19 @@
 #include <iostream>
 #include "SQLParser.h"
 #include "sqlhelper.h"
+
+#include <crtdbg.h>
+
+#define _CRTDBG_MAP_ALLOC 
 using namespace std;
 using namespace sql;
 
 int main(int argc, char *argv[]) {
 	string s;
-	while (1) {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	_crtBreakAlloc = 367;
+
+
 
 	string query;//= "select a from b;\ninsert into a values (1);";
 	getline(cin, query);
@@ -55,5 +62,7 @@ int main(int argc, char *argv[]) {
 		printf("Invalid SQL!\n");
 	
 	}
-	}
+	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
+
+	_CrtDumpMemoryLeaks();
 }

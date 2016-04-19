@@ -28,8 +28,8 @@ namespace sql {
 		}
 
         TableRefType type;
-        char* name;
-        char* alias;
+        char* name = NULL;
+        char* alias = NULL;
         inline char* getName() {
             if (alias != NULL) return alias;
             else return name;
