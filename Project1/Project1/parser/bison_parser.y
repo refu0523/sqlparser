@@ -343,7 +343,11 @@ int_literal:
 		INTVAL { $$ = Expr::makeLiteral($1); };
 
 star_expr:
-		'*' { $$ = new Expr(kExprStar); };
+		'*' { $$ = new Expr(kExprStar); }
+	|	IDENTIFIER '.' '*' {
+			$$ = new Expr(kExprStar);
+			$$->table=$1;
+		};
 
 
 
