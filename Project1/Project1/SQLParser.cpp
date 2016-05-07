@@ -9,6 +9,8 @@
 namespace sql {
 
     SQLParserResult* SQLParser::parseSQLString(const char *text) {
+		
+
         SQLParserResult* result = NULL;
         yyscan_t scanner;
         YY_BUFFER_STATE state;

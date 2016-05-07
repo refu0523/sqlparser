@@ -35,23 +35,36 @@ namespace sql {
 
     struct CreateStatement : SQLStatement {
     
-
+		const char* tableName;
+		const char* attrName;
+		std::vector<ColumnDefinition*>* columns;
+		std::vector<int>* offsets;
+		enum CreateType {
+			TABLE,
+			INDEX
+		};
+		enum IndexType {
+			HASH,
+			TREE
+		};
+		CreateType createType;
+		IndexType indexType;
         CreateStatement() :
             SQLStatement(kStmtCreate),
             tableName(NULL),
             columns(NULL),
-			offsets(NULL){};
+			offsets(NULL),
+			attrName(NULL){};
 
         virtual ~CreateStatement() {
             delete columns;
             delete tableName;
 			delete offsets;
+			delete attrName;
         }
 		
-        const char* tableName;
-        std::vector<ColumnDefinition*>* columns;
-		std::vector<int>* offsets;
-		
+      
+
 		inline void calculateOffsets(){
 			int offset = 0;
 			for (int i = 0; i < columns->size(); i++) {

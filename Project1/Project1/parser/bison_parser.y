@@ -124,9 +124,8 @@ int yyerror(YYLTYPE* llocp, SQLParserResult** result, yyscan_t scanner, const ch
 %token FROM INTO LEFT 
 %token NULL ADD ALL
 %token AND INT KEY NOT AS 
-%token OR 
-%token COUNT SUM 
-
+%token OR ON INDEX
+%token COUNT SUM HASH TREE
 
 %type <stmt_list>	statement_list
 %type <statement> 	statement 
@@ -188,11 +187,27 @@ create_statement:
 		
 		CREATE TABLE table_name '(' column_def_commalist ')' {
 			$$ = new CreateStatement();
+			$$-> createType= CreateStatement::TABLE;
 			$$->tableName = $3;
 			$$->columns = $5;
 			$$->offsets= new std::vector<int>();
 			$$->calculateOffsets();
-		};
+		}
+	|	CREATE HASH INDEX ON table_name '(' IDENTIFIER ')'{
+			$$ = new CreateStatement();
+			$$-> createType = CreateStatement::INDEX;
+			$$-> indexType = CreateStatement::HASH;
+			$$->tableName = $5;
+			$$->attrName = $7;
+		}
+	|	CREATE TREE INDEX ON table_name '(' IDENTIFIER ')'{
+			$$ = new CreateStatement();
+			$$-> createType = CreateStatement::INDEX;
+			$$-> indexType = CreateStatement::TREE;
+			$$->tableName = $5;
+			$$->attrName = $7;
+		}
+	;
 
 
 column_def_commalist:

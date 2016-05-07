@@ -13,10 +13,8 @@ using namespace sql;
 
 int main(int argc, char *argv[]) {
 	string s;
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	_crtBreakAlloc = 367;
 
-
+	while (1) {
 
 	string query;//= "select a from b;\ninsert into a values (1);";
 	getline(cin, query);
@@ -62,7 +60,7 @@ int main(int argc, char *argv[]) {
 		printf("Invalid SQL!\n");
 	
 	}
-	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
 
-	_CrtDumpMemoryLeaks();
+
+	}
 }

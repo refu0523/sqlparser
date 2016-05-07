@@ -24,7 +24,6 @@ struct SQL_CUST_LTYPE {
 
 	// Placeholder
 	int placeholder_id;
-	std::vector<void*> placeholder_list;
 };
 
 #define SQL_LTYPE SQL_CUST_LTYPE

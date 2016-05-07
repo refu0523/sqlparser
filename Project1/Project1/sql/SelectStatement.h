@@ -35,7 +35,7 @@ namespace sql {
 			delete whereClause;
 			delete aggregation_list;
 		}
-		std::vector<AggregationFunction*>* aggregation_list;
+		std::vector<AggregationFunction*>* aggregation_list=NULL;
 		std::vector<TableRef*>* fromTable = NULL;
 		std::vector<Expr*>* selectList = NULL;
 		Expr* whereClause = NULL;
