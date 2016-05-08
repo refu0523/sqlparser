@@ -97,7 +97,7 @@ ON 			TOKEN(ON)
 	return SQL_FLOATVAL;
 }
 
-[0-9]+	{
+-?[0-9]+	{
 	yylval->ival = atol(yytext);
 	return SQL_INTVAL;
 }
